@@ -1,0 +1,7 @@
+#coding=utf8
+
+MAX_WIDTH = 100
+MAX_HEIGHT = 100
+
+PNT_NUM_LIST = (1000,2000,3000)
+
