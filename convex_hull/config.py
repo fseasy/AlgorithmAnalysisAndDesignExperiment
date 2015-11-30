@@ -1,5 +1,7 @@
 #coding=utf8
 
+STATIC_RANDOM_SEED = 123
+
 MAX_WIDTH = 100
 MAX_HEIGHT = 100
 
