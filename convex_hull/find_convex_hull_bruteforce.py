@@ -18,6 +18,7 @@ def is_in_same_side(line_pnt_a , line_pnt_b , test_pnt_a , test_pnt_b) :
 
 def find_convex_hull_bruteforce(pnts) :
     pnt_num = len(pnts)
+    if pnt_num < 3 : return []
     is_convex_hull = [True] * pnt_num
     for pnt_a_idx , pnt_a in enumerate(pnts) :
         # point A
