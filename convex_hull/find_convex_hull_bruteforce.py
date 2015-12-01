@@ -4,8 +4,9 @@ def calc_line_params(line_pnt_a , line_pnt_b ) :
     w_1 = -(line_pnt_a.y - line_pnt_b.y)
     w_2 = line_pnt_a.x - line_pnt_b.x
     norm_factor = max(abs(w_1) , abs(w_2))
-    w_1 = w_1 / float(norm_factor)
-    w_2 = w_2 / float(norm_factor)
+    if norm_factor >= 1000 : # IF |w_1| or |w_2| is too big , to normalize it !
+        w_1 = w_1 / float(norm_factor)
+        w_2 = w_2 / float(norm_factor)
     b = - (w_1 * line_pnt_a.x + w_2 * line_pnt_a.y)
     return ( w_1 , w_2 , b )
 
@@ -45,7 +46,7 @@ def find_convex_hull_bruteforce(pnts) :
             convex_hull_pnts.append(pnts[pnt_idx])
     return convex_hull_pnts
 
-def ready_plot_pnts(convex_hull_pnts) :
+def ready_plot_pnts_bruteforce(convex_hull_pnts) :
     left_most_pnt = min(convex_hull_pnts , key=lambda p : p.x)
     right_most_pnt = max(convex_hull_pnts , key=lambda p : p.x)
     boundary_line = calc_line_params(left_most_pnt , right_most_pnt) # line = ( w_1 , w_2 , b )
