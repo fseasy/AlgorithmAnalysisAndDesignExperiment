@@ -5,9 +5,10 @@ from config import EPSILON
 from tools import ( is_float_num_equal ,
                     calc_distance )
 
-def sort_pnts_by_polar_angle_ccw(origin_pnt , other_pnts , cmp_func_using_cosine=False) :
-    other_pnts = other_pnts[:] # make a copy to avoid change the origin data !
-    # First , define the compare function for sort by polar angle
+def get_polar_angle_cmp_function(origin_pnt , cmp_func_using_cosine=False) :
+    '''
+    define the compare function for sort by polar angle
+    '''
     def polar_angle_cmp_func_using_cross_product(p1 , p2) :
         '''
         According to the `cross product result` of two vector to decide which polar angle is big  
@@ -94,11 +95,17 @@ def sort_pnts_by_polar_angle_ccw(origin_pnt , other_pnts , cmp_func_using_cosine
             return -1
         else :
             return 1
-    # sort 
     if cmp_func_using_cosine :
-        cmp_func = polar_angle_cmp_func_using_cosine
+        return polar_angle_cmp_func_using_cosine
     else :
-        cmp_func = polar_angle_cmp_func_using_cross_product
+        return polar_angle_cmp_func_using_cross_product
+
+
+def sort_pnts_by_polar_angle_ccw(origin_pnt , other_pnts , cmp_func_using_cosine=False) :
+    other_pnts = other_pnts[:] # make a copy to avoid change the origin data !
+    
+    # sort 
+    cmp_func = get_polar_angle_cmp_function(origin_pnt , cmp_func_using_cosine)
     sorted_pnts = sorted(other_pnts , cmp=cmp_func)
     return sorted_pnts
 

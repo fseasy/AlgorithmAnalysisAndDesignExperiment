@@ -10,3 +10,9 @@ class Point(object):
 
     def __repr__(self) :
         return self.__str__()
+
+    def __add__(self , pnt) :
+        return Point(self.x + pnt.x , self.y + pnt.y)
+
+    def __mul__(self , singular) :
+        return Point(self.x * singular , self.y * singular)
