@@ -6,6 +6,8 @@ class TimeStat(object) :
     def __init__(self) :
         self.pnt_nums = []
         self.bruteforce_time_cost = []
+        self.grahamscan_time_cost = []
+        self.dc_time_cost = []
         self.start_time = 0
         self.end_time = 0
 
@@ -14,6 +16,12 @@ class TimeStat(object) :
 
     def add_stat_brute_force_timecost(self , t) :
         self.bruteforce_time_cost.append(t)
+
+    def add_stat_graham_scan_timecost(self , t) :
+        self.grahamscan_time_cost.append(t)
+
+    def add_stat_dc_timecost(self , t) :
+        self.dc_time_cost.append(t)
 
     def start_time_stat(self) :
         self.start_time =  time.time()
@@ -30,6 +38,8 @@ class TimeStat(object) :
         self.start_time = 0 
         self.end_time = 0
         self.bruteforce_time_cost = []
+        self.grahamscan_time_cost = []
+        self.dc_time_cost = []
         self.pnt_nums = []
 
     def print_time_cost(self) :
@@ -41,4 +51,12 @@ class TimeStat(object) :
         print header_line.format(**locals())
         left_header = "brute-force"
         time_cost = self.bruteforce_time_cost
+        print formated_line.format(**locals())
+
+        left_header = "graham scan"
+        time_cost = self.grahamscan_time_cost
+        print formated_line.format(**locals())
+
+        left_header = "divide conquer"
+        time_cost = self.dc_time_cost
         print formated_line.format(**locals())

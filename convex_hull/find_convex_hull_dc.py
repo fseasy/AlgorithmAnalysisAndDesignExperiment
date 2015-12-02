@@ -2,7 +2,8 @@
 
 from find_convex_hull_grahamscan import ( sort_pnts_by_polar_angle_ccw ,
                                           get_polar_angle_cmp_function ,
-                                          find_convex_hull_grahamscan )
+                                          find_convex_hull_grahamscan ,
+                                          ready_plot_pnts_grahamscan )
 from tools import ( randomized_select ,
                     get_min_and_max_value_and_index )
 from point import Point 
@@ -169,3 +170,10 @@ def find_convex_hull_dc(pnts) :
     #print merge_rst
     #exit(1)
     return find_convex_hull_grahamscan(merge_rst)
+
+
+def ready_plot_pnts_dc(dc_convex_hull_pnts) :
+    '''
+    Just use graham scan result !
+    '''
+    return ready_plot_pnts_grahamscan(dc_convex_hull_pnts)
