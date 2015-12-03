@@ -1,9 +1,13 @@
 #coding=utf8
 
 import random
-from config import GENERATE_EDGE_PROBABILITY_THRESHOLD as threshold 
+import time 
+from config import GENERATE_EDGE_PROBABILITY_THRESHOLD as THRESHOLD
+from config import STATIC_RANDOM_SEED
 
-def generate_random_connected_graph(vertex_num) :
+def generate_random_connected_graph(vertex_num , is_static_random=True) :
+    if is_static_random : random.seed(STATIC_RANDOM_SEED)
+    else : random.seed(time.time())
     vertex = [i for i in range(vertex_num)] # using 0, 1 , 2 .. vertex_num-1 as the vertex name
     # random generate the edge !
     # Just to generate a adjancent matrix to stand for the edge
@@ -14,7 +18,7 @@ def generate_random_connected_graph(vertex_num) :
     adj_matrix = [ [False] * vertex_num for i in range(vertex_num) ]
     for from_node in range(vertex_num - 1) :
         for to_node in range(from_node + 1 , vertex_num) :
-            adj_matrix[from_node][to_node] = ( random.random() > 0.5 )
+            adj_matrix[from_node][to_node] = ( random.random() > THRESHOLD )
 
     # to avoid there is no connected path , we build a random path !
     node = vertex[:]

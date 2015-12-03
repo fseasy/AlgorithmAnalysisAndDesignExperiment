@@ -1,11 +1,12 @@
 #coding=utf8
 
+import Queue
 import copy
 from state import StateMemoryLess as State
 
-def find_hamiltonian_in_dfs(vertex , adj_matrix) :
+def find_hamiltonian_in_bfs(vertex , adj_matrix) :
     adj_matrix = copy.copy(adj_matrix) # copy , to avoid change the origin data
-    stack = []
+    queue = Queue.Queue()
     vertex_num = len(vertex)
     # Build Root State
     # just using convex idx 0 for the root 
@@ -14,18 +15,12 @@ def find_hamiltonian_in_dfs(vertex , adj_matrix) :
     visited_state = [False] * vertex_num
     root = State(root_vertex_id , previous_vertex_id , visited_state)
     root.init_path_recorder_from_parent(None)
-    stack.append(root)
-    
-    op_nums = 0 
-
-    while len(stack) > 0 :
-        # visit stack top
-        cur_node = stack.pop()
+    queue.put(root)
+    while not queue.empty() :
+        # visit queue head
+        cur_node = queue.get()
         cur_node.set_visited()
         cur_node.add_path(cur_node.get_vertex_id())
-
-        op_nums += 1
-
         ## ready to extend the childs !
         extendable_convex_id_list = cur_node.get_extendable_vertex_id(adj_matrix)
         # check whether extendable
@@ -33,7 +28,6 @@ def find_hamiltonian_in_dfs(vertex , adj_matrix) :
             if cur_node.has_hamiltonian(root_vertex_id,adj_matrix) :
                 # print the path
                 print cur_node.get_path()
-                print op_nums
                 return True 
             else :
                 continue # no node to be extended ! 
@@ -46,8 +40,5 @@ def find_hamiltonian_in_dfs(vertex , adj_matrix) :
                            # the copy is necessary . if No Copy , all node share one list
             extend_state.init_path_recorder_from_parent(cur_node)
 
-            stack.append(extend_state)
+            queue.put(extend_state)
     return False
-
-        
-
