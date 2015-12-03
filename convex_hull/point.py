@@ -16,3 +16,6 @@ class Point(object):
 
     def __mul__(self , singular) :
         return Point(self.x * singular , self.y * singular)
+
+    def __sub__(self , pnt) :
+        return Point(self.x - pnt.x, self.y - pnt.y)

@@ -13,6 +13,9 @@ def is_float_num_equal(a, b , epsilon=EPSILON) :
 def calc_distance(pnt1 , pnt2) :
     return math.sqrt( (pnt1.x - pnt2.x)**2 + (pnt1.y - pnt2.y)**2 )
 
+def cross_product_2d(pnt1 , pnt2) :
+    return pnt1.x * pnt2.y - pnt1.y *pnt2.x
+
 def randomized_select(l , i_th , key=None) :
     '''
     Implementation from <Introduction  to Algorithm> chapter 9 .

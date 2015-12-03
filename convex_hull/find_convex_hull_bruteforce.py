@@ -1,5 +1,8 @@
 #coding=utf8
 
+from tools import cross_product_2d
+from config import EPSILON
+
 def calc_line_params(line_pnt_a , line_pnt_b ) :
     w_1 = -(line_pnt_a.y - line_pnt_b.y)
     w_2 = line_pnt_a.x - line_pnt_b.x
@@ -14,10 +17,53 @@ def is_in_same_side(line_pnt_a , line_pnt_b , test_pnt_a , test_pnt_b) :
     w_1 , w_2 , b = calc_line_params(line_pnt_a , line_pnt_b) 
     y_1 = w_1 * test_pnt_a.x + w_2 * test_pnt_a.y + b
     y_2 = w_1 * test_pnt_b.x + w_2 * test_pnt_b.y + b
-    if y_1*y_2 >= 0 : return True 
-    else : return False
+    if y_1 * y_2 >= 0 :
+        return True
+    else :
+        return False
+
+def is_3pnts_in_one_line(pnt_a , pnt_b , pnt_c) :
+    '''
+    To know wheather 3 points are in one line 
+    using cross product of 2 vector to judge . 
+    if cross product of the 2 vector is zero , they are in one line !
+    '''
+    if abs(cross_product_2d(pnt_b - pnt_a , pnt_c - pnt_b) ) < EPSILON :
+        return True
+    else :
+        return False
+
+def is_in_rectangle(endpoint_a , endpoint_b , endpoint_c , p) :
+    '''
+    Return :
+            -1 : endpoint  a , b , c is not a rectangle !!
+            1  : p is in rectangle
+            0  : p is not in rectangle 
+    '''
+    ##使用中文来说明：
+    # 当多余三个点在一条直线上时，判断凸包的会出现问题！ 
+    # 考虑一种特殊情况，凸包的一条边上，有4个点属于点集合，按照凸包的定义，只有端点的两个才是凸包点，中间的两个点不是！
+    # 但是，在此情况下，如果按照暴力算法来判断凸包，即一个点是否在其余三个点围成的三角形内部。取三个点为两个中间点，
+    # 再加一个端点，易知——如果我们以 点到直线距离的乘积 大于等于 0 作为在一边的判断依据，那么就会了另一个端点判断为
+    # 在三角形内部，而将其认为非凸包 ！！
+    # 这样就错了！
+    # 错误的关键就在于，当如果有一个点到直线距离为0，即3点共线时，其根本构不成三角形！
+    # 所以，我们必须先判断端点a，b，c能否构成三角形，然后才能判断p是否在三角形内部！
+    if is_3pnts_in_one_line(endpoint_a , endpoint_b , endpoint_c) :
+        return -1
+    if ( is_in_same_side(endpoint_a , endpoint_b , endpoint_c , p) and 
+         is_in_same_side(endpoint_a , endpoint_c , endpoint_b , p) and 
+         is_in_same_side(endpoint_b , endpoint_c , endpoint_a , p) ) :
+        return 1
+    else :
+        return 0
+
 
 def find_convex_hull_bruteforce(pnts) :
+    ## without the skip of every upper circulation , we get a long time cost :
+    ## method-name          | pnt-nums=1000        | pnt-nums=2000        | pnt-nums=3000
+    ## brute-force          |                10.93 |               145.42 |              1012.40
+    # so we add the skip operation .
     pnt_num = len(pnts)
     if pnt_num < 3 : return []
     is_convex_hull = [True] * pnt_num
@@ -36,10 +82,18 @@ def find_convex_hull_bruteforce(pnts) :
                     # tesing point
                     if not is_convex_hull[pnt_test_idx] : continue
                     if pnt_test_idx in (pnt_a_idx , pnt_b_idx , pnt_c_idx) : continue
-                    if( is_in_same_side(pnt_a , pnt_b , pnt_c , pnt_test) and 
-                        is_in_same_side(pnt_a , pnt_c , pnt_b , pnt_test) and 
-                        is_in_same_side(pnt_b , pnt_c , pnt_a , pnt_test)) :
+                    inner_rectangle_rst =  is_in_rectangle(pnt_a , pnt_b , pnt_c , pnt_test) 
+                    if inner_rectangle_rst == 1 :
                         is_convex_hull[pnt_test_idx] = False
+                    elif inner_rectangle_rst == -1 :
+                        # a , b , c is in one line ! 
+                        # we can abanon the inner pointer of line ( a , b , c )
+                        inner_pnt , inner_pnt_idx = sorted(
+                            [(pnt_a , pnt_a_idx) , (pnt_b , pnt_b_idx) , (pnt_c , pnt_c_idx)] ,
+                            key=lambda t : ( t[0].x , t[0].y ) # in x , y increasing order 
+                            )[1]
+                        is_convex_hull[inner_pnt_idx] = False
+
     convex_hull_pnts = []
     for pnt_idx , pnt_is_convex_hull in enumerate(is_convex_hull) :
         if pnt_is_convex_hull :

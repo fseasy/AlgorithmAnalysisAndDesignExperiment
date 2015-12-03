@@ -1,6 +1,7 @@
 #coding=utf8
 
 import time
+from matplotlib import pyplot as plot
 
 class TimeStat(object) :
     def __init__(self) :
@@ -60,3 +61,23 @@ class TimeStat(object) :
         left_header = "divide conquer"
         time_cost = self.dc_time_cost
         print formated_line.format(**locals())
+
+    def draw_stat(self , config={}) :
+        figure_title = config.get('title' , "Time Cost Statistics in different dataset with different algorithm")
+        plot.figure(figure_title)  
+        plot.suptitle(figure_title , fontsize=16)
+
+        # x-axis is the pnt-nums
+        x_values = self.pnt_nums 
+
+        # y-aixs is the time cost of different algorithm
+        plot.plot(x_values , self.bruteforce_time_cost , 'mo-' , label="burte force")
+        plot.plot(x_values , self.grahamscan_time_cost , 'gx-' , label="graham scan")
+        plot.plot(x_values , self.dc_time_cost , 'k+-' , label="divide conquer")
+
+        x_label = config.get('x_label' , 'Pnt Num')
+        y_label = config.get('y_label' , 'Time Cost / (secondes)')
+        plot.xlabel(x_label)
+        plot.ylabel(y_label)
+        plot.legend()
+        #plot.show() # `show` is a blockint function ! we call it after all have been drawed  
