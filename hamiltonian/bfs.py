@@ -12,7 +12,7 @@ from state import StateMemoryLess as State
 ## 所以为了该程序在PC上运行，需要增大边生成的概率，即config.py中GENERATE_EDGE_PROBABILITY_THRESHOLD值
 ## 设为0.8时时间尚可，哈密顿环形成概率也可。
 ##
-def find_hamiltonian_in_bfs(vertex , adj_matrix) :
+def find_hamiltonian_in_bfs(vertex , adj_matrix , timer) :
     adj_matrix = copy.copy(adj_matrix) # copy , to avoid change the origin data
     queue = Queue.Queue()
     vertex_num = len(vertex)
@@ -21,8 +21,8 @@ def find_hamiltonian_in_bfs(vertex , adj_matrix) :
     root_vertex_id = 0
     previous_vertex_id = -1 
     visited_state = [False] * vertex_num
-    root = State(root_vertex_id , previous_vertex_id , visited_state)
-    root.init_path_recorder_from_parent(None)
+    path = [ ]
+    root = State(root_vertex_id , previous_vertex_id , visited_state , path)
     queue.put(root)
     while not queue.empty() :
         # visit queue head
@@ -35,18 +35,16 @@ def find_hamiltonian_in_bfs(vertex , adj_matrix) :
         if len(extendable_convex_id_list) == 0 :
             if cur_node.has_hamiltonian(root_vertex_id,adj_matrix) :
                 # print the path
-                print cur_node.get_path()
-                return True 
+                #print cur_node.get_path()
+                return cur_node.get_path()  
             else :
                 continue # no node to be extended ! 
         # extend child
         cur_visited_state = cur_node.get_visited_state()
         previous_vertex_id = cur_node.get_vertex_id()
+        previous_path = cur_node.get_path()
         for extend_convex_id in extendable_convex_id_list :
             extend_state = State(extend_convex_id ,previous_vertex_id , 
-                                 copy.copy(cur_visited_state)) # make a copy .
-                           # the copy is necessary . if No Copy , all node share one list
-            extend_state.init_path_recorder_from_parent(cur_node)
-
+                                 copy.copy(cur_visited_state) , copy.copy(previous_path)) 
             queue.put(extend_state)
-    return False
+    return None

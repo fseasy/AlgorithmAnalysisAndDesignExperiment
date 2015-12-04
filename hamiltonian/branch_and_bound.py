@@ -32,12 +32,12 @@ def find_min_hamiltonian_in_branch_and_bound(vertex , cost_matrix) :
             # has hamiltonian 
             # check low bound 
             cur_graph_cost = cur_graph.get_low_bound()
-            print "FIND !!"
-            print cur_graph_cost
+            #print "FIND !!"
+            #print cur_graph_cost
             if cur_graph_cost < global_low_bound :
                 global_low_bound = cur_graph_cost
                 cor_hamiltonian = cur_graph.get_path()
-                print "UPDATE GLOBAL GRAPH LOW BOUND"
+                #print "UPDATE GLOBAL GRAPH LOW BOUND"
             continue # here , using continue , because i do not want to indent in the next part !
         # else , it is normal state , should be extend continues .
         ## divide the sub space
@@ -46,8 +46,8 @@ def find_min_hamiltonian_in_branch_and_bound(vertex , cost_matrix) :
         
         if edge is None : continue 
         #print_2d_array(cur_graph.get_cost_matrix())
-        print "select row and col "
-        print edge
+        #print "select row and col "
+        #print edge
         
         # init left_tree , right_tree
         cost_matrix = cur_graph.get_cost_matrix()
@@ -79,11 +79,11 @@ def find_min_hamiltonian_in_branch_and_bound(vertex , cost_matrix) :
         if left_tree.get_low_bound() < global_low_bound :
             stack.append(left_tree)
         
-        print "\n\n====left tree matrix===="
-        print_2d_array(left_tree.get_cost_matrix())
-        print left_tree.get_path_pair() 
-        print "====right tree matrix===="
-        print_2d_array(right_tree.get_cost_matrix())
+        # print "\n\n====left tree matrix===="
+        # print_2d_array(left_tree.get_cost_matrix())
+        # print left_tree.get_path_pair() 
+        # print "====right tree matrix===="
+        # print_2d_array(right_tree.get_cost_matrix())
 
     print global_low_bound
     print cor_hamiltonian

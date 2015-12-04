@@ -8,10 +8,12 @@ class StateMemoryLess(object) :
     If no need to record adjacent matrix , this class is optimized !
     Else , using Stae below .
     '''
-    def __init__(self , cur_vertex_id , previous_vertex_id , visited_state_copy) :
+    def __init__(self , cur_vertex_id , previous_vertex_id , visited_state_copy , path_copy) :
         self.cur_vertex_id = cur_vertex_id
         self.previous_vertex_id = previous_vertex_id
         self.visited_state = visited_state_copy # we do the copy out of the struct !
+        self.path = path_copy
+
     
     def set_visited(self) :
         self.visited_state[self.cur_vertex_id] = True
@@ -43,16 +45,12 @@ class StateMemoryLess(object) :
             return True
         else :
             return False
-    def init_path_recorder_from_parent(self , parent_node=None) :
-        if parent_node == None or hasattr(parent_node , 'path') == False :
-            self.path = []
-        else :
-            self.path  = copy.copy(parent_node.get_path())
-    def add_path(self , previous_vertex_id) :
-        if hasattr(self , 'path') :
-            self.path.append(previous_vertex_id)
+
+    def add_path(self , vertex_id) :
+        self.path.append(vertex_id)
+
     def get_path(self) :
-        return self.path if hasattr(self , 'path') else None 
+        return self.path
 
     def __str__(self) :
         out_str = [

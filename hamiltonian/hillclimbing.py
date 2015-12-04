@@ -63,7 +63,7 @@ def sort_sub_convex_in_heuristic_rule_with_increasing_order(sub_vertex_list , ad
     sorted_rst = sorted(zip( sub_vertex_list , scores ) , key=lambda t : t[1] )
     return [ t[0] for t in  sorted_rst ]
 
-def find_hamiltonian_in_hillclimbing(vertex , adj_matrix) :
+def find_hamiltonian_in_hillclimbing(vertex , adj_matrix , timer) :
     adj_matrix = copy.copy(adj_matrix) # copy , to avoid change the origin data
     stack = []
     vertex_num = len(vertex)
@@ -72,10 +72,9 @@ def find_hamiltonian_in_hillclimbing(vertex , adj_matrix) :
     root_vertex_id = 0
     previous_vertex_id = -1 
     visited_state = [False] * vertex_num
-    root = State(root_vertex_id , previous_vertex_id , visited_state)
-    root.init_path_recorder_from_parent(None)
+    path = [ ]
+    root = State(root_vertex_id , previous_vertex_id , visited_state , path)
     stack.append(root)
-    
     op_nums = 0
 
     while len(stack) > 0 :
@@ -92,14 +91,13 @@ def find_hamiltonian_in_hillclimbing(vertex , adj_matrix) :
         if len(extendable_convex_id_list) == 0 :
             if cur_node.has_hamiltonian(root_vertex_id,adj_matrix) :
                 # print the path
-                print cur_node.get_path()
-                print op_nums
-                return True 
+                return cur_node.get_path()   
             else :
                 continue # no node to be extended ! 
                 # extend child
         cur_visited_state = cur_node.get_visited_state()
         previous_vertex_id = cur_node.get_vertex_id()
+        previous_path = cur_node.get_path()
         # sort the child under the herustic evalution function
         extendable_convex_id_list = ( 
                 sort_sub_convex_in_heuristic_rule_with_increasing_order(
@@ -108,12 +106,9 @@ def find_hamiltonian_in_hillclimbing(vertex , adj_matrix) :
                                     )
         for extend_convex_id in extendable_convex_id_list :
             extend_state = State(extend_convex_id ,previous_vertex_id , 
-                                 copy.copy(cur_visited_state)) # make a copy .
-                           # the copy is necessary . if No Copy , all node share one list
-            extend_state.init_path_recorder_from_parent(cur_node)
-
+                                 copy.copy(cur_visited_state) , copy.copy(previous_path)) 
             stack.append(extend_state)
-    return False
+    return None
 
         
 
