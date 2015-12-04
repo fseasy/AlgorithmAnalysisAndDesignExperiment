@@ -2,8 +2,9 @@
 
 import random
 import time 
-from config import GENERATE_EDGE_PROBABILITY_THRESHOLD as THRESHOLD
-from config import STATIC_RANDOM_SEED
+from config import ( GENERATE_EDGE_PROBABILITY_THRESHOLD as THRESHOLD ,
+                     STATIC_RANDOM_SEED , 
+                     MAX_WEIGHT , MIN_WEIGHT , INF )
 
 def generate_random_connected_graph(vertex_num , is_static_random=True) :
     if is_static_random : random.seed(STATIC_RANDOM_SEED)
@@ -33,4 +34,17 @@ def generate_random_connected_graph(vertex_num , is_static_random=True) :
         for j in range(i+1 , vertex_num) :
             adj_matrix[j][i] = adj_matrix[i][j]
     return (vertex , adj_matrix)
+
+def generate_random_weighted_complete_graph(vertex_num , is_static_random) :
+    if is_static_random : random.seed(STATIC_RANDOM_SEED)
+    else : random.seed(time.time())
+    vertex = [ i for i in range(vertex_num)] # also use 0 , 1 , 2 to stand for the vertex name
+    # It is also a Undirected graph , so it is a symmetrix matrix
+    # init up triangle matrix , and copy A_{ij} to A_{ji}
+    cost_matrix = [ [ INF ] * vertex_num for i in range(vertex_num) ]
+    for i in range(vertex_num-1) :
+        for j in range(i+1 , vertex_num) :
+            cost_matrix[i][j] = random.randint(MIN_WEIGHT , MAX_WEIGHT) # including the MAX_WEIGHT
+            cost_matrix[j][i] = cost_matrix[i][j]
+    return vertex , cost_matrix
 

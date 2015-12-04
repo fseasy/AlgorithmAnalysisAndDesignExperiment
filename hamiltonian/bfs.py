@@ -3,7 +3,15 @@
 import Queue
 import copy
 from state import StateMemoryLess as State
-
+## 当图的连通度很高（边密集）、节点很大时，BFS需要指数递增的内存消耗！
+## 经过本机测试，当将边生产的概率阈值设为0.5 ， 且节点数为16时，电脑出现卡死、黑屏现象，硬盘狂转，打开任务管理器，
+## 出现巨大的内存消耗， 8G内存下此程序最多消耗2G ， 当内存达到99%时，磁盘访问达到100% （应该是在内存转储），IO操作导致
+## 机器卡死。然而整个过程CPU消耗都是稳定且不高的。测试了大概半个小时，没有任何结果输出，由于还有代码要写，就关闭了程序。
+## 为了防止上述现象出现，在节点数不可变情况下，减小图的连通度，即正大边生成的权值，可以减少可扩展节点的个数。
+##  
+## 所以为了该程序在PC上运行，需要增大边生成的概率，即config.py中GENERATE_EDGE_PROBABILITY_THRESHOLD值
+## 设为0.8时时间尚可，哈密顿环形成概率也可。
+##
 def find_hamiltonian_in_bfs(vertex , adj_matrix) :
     adj_matrix = copy.copy(adj_matrix) # copy , to avoid change the origin data
     queue = Queue.Queue()
