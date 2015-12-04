@@ -34,6 +34,8 @@ def heuristic_eval_function(sub_vertex_id , adj_matrix , visited_state_list ) :
     于是给上述值去反！ 结果大部分情况下果然其遍历次数比dfs小！
     
     确认了上述排序以及压栈操作没有反！
+
+    # 想到一个可能的解释 —— 连接的点越少，可能有较大概率事一条关键路径。
     '''
     convex_num = len(visited_state_list)
     connected_not_visited_num = 0
@@ -90,8 +92,8 @@ def find_hamiltonian_in_hillclimbing(vertex , adj_matrix , timer) :
         # check whether extendable
         if len(extendable_convex_id_list) == 0 :
             if cur_node.has_hamiltonian(root_vertex_id,adj_matrix) :
-                # print the path
-                return cur_node.get_path()   
+                path = cur_node.get_path()
+                return path + path[:1]   
             else :
                 continue # no node to be extended ! 
                 # extend child

@@ -67,22 +67,36 @@ class TimeStat(object) :
         time_cost = self.dc_time_cost
         print formated_line.format(**locals())
 
-    def draw_stat(self , config={}) :
-        figure_title = config.get('title' , "Time Cost Statistics in different dataset with different algorithm")
-        plot.figure(figure_title)  
-        plot.suptitle(figure_title , fontsize=16)
+    def draw_stat(self) :
+        ## Figure 1 . time cost about 3 methods finding a hamiltonian in different vertex size 
+        figure_1_title = "Time Cost Statistics in different vertex size with different algorithm"
+        plot.figure(figure_1_title)  
+        plot.suptitle(figure_1_title , fontsize=16)
 
         # x-axis is the pnt-nums
-        x_values = self.pnt_nums 
+        x_values = self.vertex_nums 
 
         # y-aixs is the time cost of different algorithm
-        plot.plot(x_values , self.bruteforce_time_cost , 'mo-' , label="burte force")
-        plot.plot(x_values , self.grahamscan_time_cost , 'gx-' , label="graham scan")
-        plot.plot(x_values , self.dc_time_cost , 'k+-' , label="divide conquer")
+        plot.plot(x_values , self.dfs_time_cost , 'mo-' , label="DFS")
+        plot.plot(x_values , self.bfs_time_cost , 'gx-' , label="BFS")
+        plot.plot(x_values , self.hillclimbing_time_cost , 'k+-' , 
+                                                 label="HillClimbing")
 
-        x_label = config.get('x_label' , 'Pnt Num')
-        y_label = config.get('y_label' , 'Time Cost / (secondes)')
+        x_label = 'Vertex Size'
+        y_label = 'Time Cost / (secondes)'
         plot.xlabel(x_label)
         plot.ylabel(y_label)
         plot.legend()
-        #plot.show() # `show` is a blockint function ! we call it after all have been drawed  
+    
+    ## Figure 2 : Time cost about using branch and bound in different vertex size
+        figure_2_title = "Time Cost Statistics using Branch and Bound in different vertex size"
+        plot.figure(figure_2_title)  
+        plot.suptitle(figure_2_title , fontsize=16)
+
+        plot.plot(x_values , self.branch_and_bound_time_cost , 'mo-' , 
+                                                label="Branch and Bound")
+        x_label = 'Vertex Size'
+        y_label = 'Time Cost / (secondes)'
+        plot.xlabel(x_label)
+        plot.ylabel(y_label)
+        plot.legend()

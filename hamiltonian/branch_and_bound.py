@@ -85,5 +85,6 @@ def find_min_hamiltonian_in_branch_and_bound(vertex , cost_matrix) :
         # print "====right tree matrix===="
         # print_2d_array(right_tree.get_cost_matrix())
 
-    print global_low_bound
-    print cor_hamiltonian
+    #print global_low_bound
+    #print cor_hamiltonian
+    return cor_hamiltonian

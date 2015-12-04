@@ -1,7 +1,8 @@
 #coding=utf8
 
+import sys
 import logging
-
+from matplotlib import pyplot as plot
 from generate_random_connected_graph import ( generate_random_connected_graph ,
                                               generate_random_weighted_complete_graph )
 from tools import print_2d_array
@@ -20,11 +21,9 @@ logging.basicConfig(level=logging.INFO)
 
 def print_path_in_console(path) :
     if path is None :
-        print "No hamiltonian "
+        print >> sys.stderr , "No hamiltonian "
     else :
-        print 
-        print " -> ".join(map(str , path))
-        print 
+        print >> sys.stderr , "\n%s\n" %(" -> ".join(map(str , path)))
         
 def main() :
     graph_stater = GraphStat()
@@ -73,7 +72,27 @@ def main() :
         graph_stater.add_stat_hill_climbing_path(hamiltonian_path_in_hillclimbing)
         logging.info('hillclimbing done .')
         print_path_in_console(hamiltonian_path_in_hillclimbing)
+        
+        # Min Hamiltonian
+        # it is different from previous 
+        logging.info('generate a complete random weighted graph')
+        vertex , cost_matrix = generate_random_weighted_complete_graph(vertex_num,False)
+        logging.info('done .')
+        logging.info('using branch and bound to find minimum halmiltonian')
+        graph_stater.add_stat_complete_graph(vertex , cost_matrix)
+        timer.start_time_stat()
 
+        min_hamiltonian = find_min_hamiltonian_in_branch_and_bound(vertex , cost_matrix)
+
+        timer.end_time_stat()
+        timer.add_stat_branch_and_bound_timecout(timer.get_time_cost())
+        graph_stater.add_stat_branch_and_bound_path(min_hamiltonian)
+        print_path_in_console(min_hamiltonian)
+        logging.info('branch and bound done .')
+
+    graph_stater.draw_stat()
+    timer.draw_stat()
+    plot.show()
 
 
 
@@ -81,27 +100,5 @@ def main() :
 
 
 if __name__ == "__main__" :
-    # vertex , adj_matrix = generate_random_connected_graph(16 , False) 
-    # print_2d_array(adj_matrix)
-    # finding_rst = find_hamiltonian_in_dfs(vertex , adj_matrix)
-    # if finding_rst :
-    #     print "是"
-    # else :
-    #     print "否"
-
-    # finding_rst = find_hamiltonian_in_bfs(vertex , adj_matrix)
-    # if finding_rst :
-    #     print "YES"
-    # else :
-    #     print "NO"
-
-    # finding_rst = find_hamiltonian_in_hillclimbing(vertex , adj_matrix)
-    # if finding_rst :
-    #     print "是"
-    # else :
-    #     print "否"
-    #vertex , cost_matrix = generate_random_weighted_complete_graph(10,False)
-    #print_2d_array(cost_matrix,4)
-    #find_min_hamiltonian_in_branch_and_bound(vertex , cost_matrix)
-
     main()
+    

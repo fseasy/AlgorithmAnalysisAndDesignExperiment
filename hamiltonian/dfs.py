@@ -39,7 +39,8 @@ def find_hamiltonian_in_dfs(vertex , adj_matrix , timer) :
             if cur_node.has_hamiltonian(root_vertex_id,adj_matrix) :
                 # print the path
                 #print cur_node.get_path()
-                return cur_node.get_path() 
+                path = cur_node.get_path() 
+                return path + path[:1] # add the root point at the end
             else :
                 continue # no node to be extended ! 
         # extend child
