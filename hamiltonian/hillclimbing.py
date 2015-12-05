@@ -35,7 +35,7 @@ def heuristic_eval_function(sub_vertex_id , adj_matrix , visited_state_list ) :
     
     确认了上述排序以及压栈操作没有反！
 
-    # 想到一个可能的解释 —— 连接的点越少，可能有较大概率事一条关键路径。
+    # 想到一个可能的解释 —— 连接的点越少，可能有较大概率是一条关键路径。
     '''
     convex_num = len(visited_state_list)
     connected_not_visited_num = 0

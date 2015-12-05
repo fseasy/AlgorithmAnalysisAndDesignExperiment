@@ -49,22 +49,26 @@ class TimeStat(object) :
         self.vertex_nums = []
 
     def print_time_cost(self) :
-        stat_cnt = len(self.pnt_nums)
+        stat_cnt = len(self.vertex_nums)
         header_line = " ".join([ "{method_name:20}" ] + [ "| {pnt_nums_str[%d]:20}" %i for i in range(stat_cnt) ])
         formated_line = " ".join([ "{left_header:20}" ] + [ "| {time_cost[%d]:20.2f}" %i for i in range(stat_cnt) ])
         method_name = "method-name"
-        pnt_nums_str = ["pnt-nums=%d" %(d) for d in self.pnt_nums ]
+        pnt_nums_str = ["vertex-nums=%d" %(d) for d in self.vertex_nums ]
         print header_line.format(**locals())
-        left_header = "brute-force"
-        time_cost = self.bruteforce_time_cost
+        left_header = "DFS"
+        time_cost = self.dfs_time_cost
         print formated_line.format(**locals())
 
-        left_header = "graham scan"
-        time_cost = self.grahamscan_time_cost
+        left_header = "BFS"
+        time_cost = self.bfs_time_cost
         print formated_line.format(**locals())
 
-        left_header = "divide conquer"
-        time_cost = self.dc_time_cost
+        left_header = "HillClimbing"
+        time_cost = self.hillclimbing_time_cost
+        print formated_line.format(**locals())
+
+        left_header = "Branch and Bound"
+        time_cost = self.branch_and_bound_time_cost
         print formated_line.format(**locals())
 
     def draw_stat(self) :

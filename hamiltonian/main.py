@@ -91,6 +91,7 @@ def main() :
         logging.info('branch and bound done .')
 
     graph_stater.draw_stat()
+    timer.print_time_cost()
     timer.draw_stat()
     plot.show()
 
