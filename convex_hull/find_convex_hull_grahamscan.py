@@ -2,6 +2,7 @@
 
 import math
 from config import EPSILON
+from find_convex_hull_bruteforce import is_3pnts_in_one_line
 from tools import ( is_float_num_equal ,
                     calc_distance )
 
@@ -131,6 +132,8 @@ def init_convex_hull_stack_with_3_convex_hull( sorted_pnts , empty_convex_hull_s
     # 1. 这两个点之间没有其他点! 即没有平行于极轴的边，那么加入此点，然后再只需要再加入后继的一个点即可。肯定构成凸包。
     # 2. 这两个点中包含至少一个与极点y值相同的点，那么我们只需要将最后一个（x值最大）的点，以及该点加入到栈中，就完成了任务！
     # 通过判断idx的大小来检测！
+    # UPDATE : HOT BUG GIX :
+    # 第一种情况考虑不全——后继点必须满足与加入的两个点不在一条直线上！！
     if idx > 0 :
         # 对应情况2！
         empty_convex_hull_stack.append(polar_point)
@@ -143,8 +146,18 @@ def init_convex_hull_stack_with_3_convex_hull( sorted_pnts , empty_convex_hull_s
             return False , 0
         empty_convex_hull_stack.append(polar_point)
         empty_convex_hull_stack.append(sorted_pnts[0])
-        empty_convex_hull_stack.append(sorted_pnts[1])
-        return True , 2 
+        # 找下一个不会与该两点成一条直线的点！！
+        idx = 1
+        while idx < pnt_num :
+            if not is_3pnts_in_one_line(polar_point , sorted_pnts[0] , 
+                                        sorted_pnts[idx]) :
+                break
+            idx += 1
+        else :
+            return False , 0
+        empty_convex_hull_stack.append(sorted_pnts[idx])
+
+        return True , idx + 1
 
 def find_convex_hull_grahamscan(pnts) :
     pnts_copy = pnts[:] # we have some operation that will change the array . so copy it !

@@ -24,7 +24,7 @@ def main() :
     pnt_nums = PNT_NUM_LIST
     logging_format = "{method_name}-{pnt_num} done ."
     for pnt_num in pnt_nums :
-        pnts = generate_pnts_in_random(pnt_num , is_static_random=True)
+        pnts = generate_pnts_in_random(pnt_num , is_static_random=False)
         pntStater.add_stat_pnts(pnts)
         timer.add_stat_pnt_num(pnt_num)
 
